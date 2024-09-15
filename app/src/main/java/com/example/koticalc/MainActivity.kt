@@ -72,6 +72,24 @@ fun CalculatorView() {
             )
         }
 
+        // Botón de borrar y línea divisoria
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            CalculatorButton(
+                symbol = "⌫",
+                onClick = { input = deleteLastCharacter(input) },
+                modifier = Modifier
+                    .padding(bottom = 8.dp, end = 20.dp) // Margen inferior y derecho
+            )
+        }
+
+        // Línea divisoria delgada
+        Divider(color = Color.Gray, thickness = 1.dp, modifier = Modifier.padding(bottom = 8.dp))
+
         // Grid de botones
         val buttons = listOf(
             listOf("C", "()", "%", "÷"),
@@ -91,12 +109,12 @@ fun CalculatorView() {
                 row.forEach { symbol ->
                     CalculatorButton(symbol, onClick = {
                         when (symbol) {
-                            "=" -> result = calculateResult(input) // Calcular el resultado
+                            "=" -> result = calculate(input) // Llamar a la función 'calculate'
                             "C" -> {
                                 input = ""
                                 result = ""
                             }
-                            "+/-" -> { // Cambiar el signo
+                            "+/-" -> {
                                 if (input.isNotEmpty()) {
                                     input = if (input.startsWith("-")) input.drop(1) else "-$input"
                                 }
@@ -112,7 +130,6 @@ fun CalculatorView() {
         }
     }
 }
-
 // Función para agregar paréntesis inteligentemente
 fun addParenthesis(input: String): String {
     val openCount = input.count { it == '(' }
@@ -149,10 +166,20 @@ fun calculateResult(input: String): String {
     }
 }
 
+// Separar la lógica para eliminar el último carácter
+fun deleteLastCharacter(input: String): String {
+    return if (input.isNotEmpty()) input.dropLast(1) else input
+}
+
+// Separar la lógica para calcular el resultado
+fun calculate(input: String): String {
+    return calculateResult(input)
+}
+
 @Composable
-fun CalculatorButton(symbol: String, onClick: () -> Unit) {
+fun CalculatorButton(symbol: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(80.dp)
             .background(Color.DarkGray, shape = RoundedCornerShape(50)) // Botón oscuro
             .clickable(onClick = onClick),
