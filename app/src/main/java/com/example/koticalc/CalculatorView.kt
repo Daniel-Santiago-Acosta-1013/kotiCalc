@@ -20,7 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.History
 import androidx.compose.ui.graphics.vector.ImageVector
 
-fun Char.isOperator(): Boolean = this == '+' || this == '-' || this == '*' || this == '/'
+fun Char.isOperator(): Boolean = this == '+' || this == '-' || this == '*' || this == '/' || this == '%'
 
 // Función para agregar paréntesis inteligentemente
 fun addParenthesis(input: String): String {
@@ -35,19 +35,28 @@ fun addParenthesis(input: String): String {
     }
 }
 
+// Función para manejar el símbolo de porcentaje (%)
+fun handlePercentage(input: String): String {
+    return try {
+        val expression = ExpressionBuilder(input).build()
+        val result = expression.evaluate() / 100.0
+        result.toString()
+    } catch (e: Exception) {
+        "Error"
+    }
+}
+
 // Función para evaluar el resultado
 fun calculateResult(input: String): String {
     return try {
-        // Uso de la librería exp4j para evaluar expresiones matemáticas
-        val expression = ExpressionBuilder(input.replace('−', '-')).build()
+        // Reemplazar el símbolo de porcentaje antes de evaluar
+        val expression = ExpressionBuilder(input.replace('−', '-').replace("%", "/100")).build()
         val result = expression.evaluate()
 
         // Verificar si el resultado es entero o decimal
         if (result == result.toLong().toDouble()) {
-            // Si el resultado es un número entero, devolverlo como entero
             result.toLong().toString()
         } else {
-            // Si el resultado es decimal, devolverlo con decimales
             result.toString()
         }
     } catch (e: Exception) {
@@ -59,7 +68,6 @@ fun calculateResult(input: String): String {
 fun calculate(input: String): String {
     return calculateResult(input)
 }
-
 
 // Separar la lógica para eliminar el último carácter
 fun deleteLastCharacter(input: String): String {
@@ -193,6 +201,10 @@ fun CalculatorView(
                                 if (input.isNotEmpty()) {
                                     onInputChange(if (input.startsWith("-")) input.drop(1) else "-$input")
                                 }
+                            }
+                            "%" -> {
+                                result = handlePercentage(input)
+                                onInputChange(result)
                             }
                             "÷" -> onInputChange(input + "/")
                             "×" -> onInputChange(input + "*")
