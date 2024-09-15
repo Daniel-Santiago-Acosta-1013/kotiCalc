@@ -135,7 +135,15 @@ fun calculateResult(input: String): String {
         // Uso de la librería exp4j para evaluar expresiones matemáticas
         val expression = ExpressionBuilder(input).build()
         val result = expression.evaluate()
-        result.toString()
+
+        // Verificar si el resultado es entero o decimal
+        if (result == result.toLong().toDouble()) {
+            // Si el resultado es un número entero, devolverlo como entero
+            result.toLong().toString()
+        } else {
+            // Si el resultado es decimal, devolverlo con decimales
+            result.toString()
+        }
     } catch (e: Exception) {
         "Error"
     }
