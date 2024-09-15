@@ -76,7 +76,7 @@ fun CalculatorButton(
     Box(
         modifier = modifier
             .size(80.dp)
-            .background(Color.DarkGray, shape = RoundedCornerShape(50))
+            .background(Color.DarkGray, shape = RoundedCornerShape(50)) // Botón oscuro
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
@@ -86,7 +86,7 @@ fun CalculatorButton(
             Text(
                 text = symbol,
                 fontSize = 32.sp,
-                color = Color.White,
+                color = Color.White, // Texto en blanco para los botones
                 textAlign = TextAlign.Center
             )
         }
@@ -96,6 +96,7 @@ fun CalculatorButton(
 @Composable
 fun CalculatorView(
     input: String,
+    history: List<Pair<String, String>>, // Lista de historial
     onNavigateToHistory: () -> Unit,
     onInputChange: (String) -> Unit,
     onAddToHistory: (String, String) -> Unit // Función para agregar al historial
