@@ -15,6 +15,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import net.objecthunter.exp4j.ExpressionBuilder
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
+import androidx.compose.ui.graphics.vector.ImageVector
 
 fun Char.isOperator(): Boolean = this == '+' || this == '-' || this == '*' || this == '/'
 
@@ -63,7 +67,12 @@ fun deleteLastCharacter(input: String): String {
 }
 
 @Composable
-fun CalculatorButton(symbol: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun CalculatorButton(
+    symbol: String? = null,
+    icon: ImageVector? = null,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier
             .size(80.dp)
@@ -71,19 +80,22 @@ fun CalculatorButton(symbol: String, onClick: () -> Unit, modifier: Modifier = M
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = symbol,
-            fontSize = 32.sp,
-            color = Color.White, // Texto en blanco para los botones
-            textAlign = TextAlign.Center
-        )
+        if (icon != null) {
+            Icon(imageVector = icon, contentDescription = "History Icon", tint = Color.White)
+        } else if (symbol != null) {
+            Text(
+                text = symbol,
+                fontSize = 32.sp,
+                color = Color.White, // Texto en blanco para los botones
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 
 @Composable
 fun CalculatorView(
     input: String,
-    history: List<Pair<String, String>>, // Lista de historial
     onNavigateToHistory: () -> Unit,
     onInputChange: (String) -> Unit,
     onAddToHistory: (String, String) -> Unit // Función para agregar al historial
@@ -133,7 +145,7 @@ fun CalculatorView(
         ) {
             // Botón de historial (Reloj)
             CalculatorButton(
-                symbol = "\u23F0",  // Unicode para el icono de reloj
+                icon = Icons.Default.History, // Uso del ícono de historial
                 onClick = onNavigateToHistory,
                 modifier = Modifier.padding(bottom = 8.dp, start = 20.dp)
             )
