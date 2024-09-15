@@ -76,7 +76,7 @@ fun CalculatorButton(
     Box(
         modifier = modifier
             .size(80.dp)
-            .background(Color.DarkGray, shape = RoundedCornerShape(50)) // Botón oscuro
+            .background(Color.DarkGray, shape = RoundedCornerShape(50))
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
@@ -86,7 +86,7 @@ fun CalculatorButton(
             Text(
                 text = symbol,
                 fontSize = 32.sp,
-                color = Color.White, // Texto en blanco para los botones
+                color = Color.White,
                 textAlign = TextAlign.Center
             )
         }
