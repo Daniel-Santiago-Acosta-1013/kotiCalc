@@ -83,8 +83,10 @@ fun CalculatorButton(symbol: String, onClick: () -> Unit, modifier: Modifier = M
 @Composable
 fun CalculatorView(
     input: String,
+    history: List<Pair<String, String>>, // Lista de historial
     onNavigateToHistory: () -> Unit,
-    onInputChange: (String) -> Unit
+    onInputChange: (String) -> Unit,
+    onAddToHistory: (String, String) -> Unit // Función para agregar al historial
 ) {
     var result by remember { mutableStateOf("") }
 
@@ -166,7 +168,10 @@ fun CalculatorView(
                 row.forEach { symbol ->
                     CalculatorButton(symbol, onClick = {
                         when (symbol) {
-                            "=" -> result = calculate(input) // Calcular el resultado
+                            "=" -> {
+                                result = calculate(input)
+                                onAddToHistory(input, result) // Guardar en historial
+                            }
                             "C" -> {
                                 onInputChange("")
                                 result = ""
