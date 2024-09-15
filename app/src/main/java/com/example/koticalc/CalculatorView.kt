@@ -39,7 +39,7 @@ fun addParenthesis(input: String): String {
 fun calculateResult(input: String): String {
     return try {
         // Uso de la librería exp4j para evaluar expresiones matemáticas
-        val expression = ExpressionBuilder(input).build()
+        val expression = ExpressionBuilder(input.replace('−', '-')).build()
         val result = expression.evaluate()
 
         // Verificar si el resultado es entero o decimal
@@ -166,7 +166,7 @@ fun CalculatorView(
         val buttons = listOf(
             listOf("C", "()", "%", "÷"),
             listOf("7", "8", "9", "×"),
-            listOf("4", "5", "6", "−"),
+            listOf("4", "5", "6", "-"),
             listOf("1", "2", "3", "+"),
             listOf("+/-", "0", ".", "=")
         )
