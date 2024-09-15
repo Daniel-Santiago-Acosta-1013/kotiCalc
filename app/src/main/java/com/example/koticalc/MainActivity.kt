@@ -63,23 +63,22 @@ fun CalculatorView() {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = result,
-                fontSize = 48.sp,
+                fontSize = 50.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.End,
-                color = Color.Green,
+                color = Color.White,
                 maxLines = 1
             )
         }
 
         // Grid de botones
         val buttons = listOf(
-            listOf("C", "(", ")", "%"),
-            listOf("7", "8", "9", "÷"),
-            listOf("4", "5", "6", "×"),
-            listOf("1", "2", "3", "−"),
-            listOf("+/-", "0", ".", "+"),
-            listOf("=")
+            listOf("C", "()", "%", "÷"),
+            listOf("7", "8", "9", "×"),
+            listOf("4", "5", "6", "−"),
+            listOf("1", "2", "3", "+"),
+            listOf("+/-", "0", ".", "=")
         )
 
         buttons.forEach { row ->
@@ -104,12 +103,41 @@ fun CalculatorView() {
                             }
                             "÷" -> input += "/"
                             "×" -> input += "*"
+                            "()" -> input += addParenthesis(input)
                             else -> input += symbol
                         }
                     })
                 }
             }
         }
+    }
+}
+
+// Función para agregar paréntesis inteligentemente
+fun addParenthesis(input: String): String {
+    val openCount = input.count { it == '(' }
+    val closeCount = input.count { it == ')' }
+
+    // Si no hay input o el último carácter es un operador o paréntesis de apertura, agregar paréntesis de apertura
+    return if (openCount == closeCount || input.lastOrNull()?.isOperator() == true || input.isEmpty()) {
+        "("
+    } else {
+        ")"
+    }
+}
+
+// Función de ayuda para verificar si un carácter es un operador
+fun Char.isOperator(): Boolean = this == '+' || this == '-' || this == '*' || this == '/'
+
+// Función para evaluar el resultado
+fun calculateResult(input: String): String {
+    return try {
+        // Uso de la librería exp4j para evaluar expresiones matemáticas
+        val expression = ExpressionBuilder(input).build()
+        val result = expression.evaluate()
+        result.toString()
+    } catch (e: Exception) {
+        "Error"
     }
 }
 
@@ -128,18 +156,6 @@ fun CalculatorButton(symbol: String, onClick: () -> Unit) {
             color = Color.White, // Texto en blanco para los botones
             textAlign = TextAlign.Center
         )
-    }
-}
-
-// Función para evaluar el resultado
-fun calculateResult(input: String): String {
-    return try {
-        // Uso de la librería exp4j para evaluar expresiones matemáticas
-        val expression = ExpressionBuilder(input).build()
-        val result = expression.evaluate()
-        result.toString()
-    } catch (e: Exception) {
-        "Error"
     }
 }
 
